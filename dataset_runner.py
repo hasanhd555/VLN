@@ -1,14 +1,7 @@
 from typing import TypedDict, List, Optional
 import json
+from .datatypes import DatasetEntry
 
-class DatasetEntry(TypedDict):
-    distance: float
-    scan: str
-    path_id: int
-    path: List[str]
-    heading: float
-    instructions: List[str]
-    goals: Optional[any]  # You can replace `any` with a specific type if known
 
 
 class DatasetRunner:
@@ -52,7 +45,7 @@ class DatasetRunner:
         paths_dataset:List[DatasetEntry]=self._load_dataset()
         for path in paths_dataset:
             for index, instruction in enumerate(path["instructions"]):
-                trajectory = self.pipeline.run(instruction, path["scan"],path["path"][0])
+                trajectory = self.pipeline.run(instruction, path["scan"],path["path"][0],path['path_id'])
                 instruction_id = f"{path['path_id']}_{index}"
                 self.log_entry(trajectory,instruction_id)
 
