@@ -186,7 +186,7 @@ def eval():
     parser.add_argument("path", type=str, help="path to a results file")
     args = parser.parse_args()
 
-    split = "val_unseen" if "val_unseen" in args.path else "val_seen"
+    split = "test"
     ev = Evaluation([split])
     score_summary, _ = ev.score(args.path)
     # 取小数点后4位

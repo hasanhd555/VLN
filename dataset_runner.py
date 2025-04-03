@@ -1,7 +1,9 @@
 from typing import TypedDict, List, Optional
 import json
-from .datatypes import DatasetEntry
-
+from datatypes import DatasetEntry
+import argparse
+from pipelines.test_pipeline import TestPipeline
+from pipelines.pipeline_graph_rotations import RotationsPipeline
 
 
 class DatasetRunner:
@@ -40,14 +42,44 @@ class DatasetRunner:
         
 
 
-    def run_split(self):
+    def run_split(self,dataset_path):
         #runs agent on each instruction
-        paths_dataset:List[DatasetEntry]=self._load_dataset()
+        paths_dataset:List[DatasetEntry]=self._load_dataset(dataset_path)
         for path in paths_dataset:
             for index, instruction in enumerate(path["instructions"]):
                 trajectory = self.pipeline.run(instruction, path["scan"],path["path"][0],path['path_id'])
                 instruction_id = f"{path['path_id']}_{index}"
                 self.log_entry(trajectory,instruction_id)
+
+def run_dataset():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("method", help="The method you want to run")
+    parser.add_argument("split", help="The dataset split you want to run on")
+    args = parser.parse_args()
+    
+    method = args.method
+    split = args.split
+    
+    valid_methods = {"test", "graph_rotations"}
+    valid_splits = {"train", "test", "val_seen", "val_unseen"}
+    
+    assert method in valid_methods, f"Invalid method: {method}. Must be one of {valid_methods}"
+    assert split in valid_splits, f"Invalid split: {split}. Must be one of {valid_splits}"
+    path="data/task/R2R_%s.json" % split
+    pipeline=None
+    if method == "test":
+        pipeline=TestPipeline(path)
+    elif method == "graph_rotations":
+        pipeline=RotationsPipeline()
+
+    runner=DatasetRunner(pipeline,"output.json")
+    
+    runner.run_split(path)
+
+if __name__ == "__main__":
+    run_dataset()
+
+
 
             
         
