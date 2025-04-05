@@ -9,3 +9,4 @@ class DatasetEntry(TypedDict):
     heading: float
     instructions: List[str]
     goals: Optional[any]  # You can replace `any` with a specific type if known
+

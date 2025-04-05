@@ -243,9 +243,6 @@ def graph_to_text_shortened(graph, viewpointIds):
 
     return text
 
-
-
-
 def get_lookahead_desc(sim, locations, viewpoint_descs, current_viewpoint, nav_graph):
     """
     Explore neighboring viewpoints (lookahead) to gather descriptions.
