@@ -1,6 +1,5 @@
-from typing import TypedDict, List, Optional
+
 import json
-from datatypes import DatasetEntry
 import argparse
 from pipelines.test_pipeline import TestPipeline
 from pipelines.pipeline_graph_rotations import RotationsPipeline
@@ -10,9 +9,9 @@ class DatasetRunner:
     def __init__(self,pipeline,output_file):
         self.pipeline = pipeline
         self.output_file=output_file
-    def _load_dataset(self, dataset_path: str) -> List[DatasetEntry]:
+    def _load_dataset(self, dataset_path: str) :
         with open(dataset_path, 'r', encoding='utf-8') as file:
-            data: List[DatasetEntry] = json.load(file)
+            data = json.load(file)
         return data
     
     def log_entry(self, trajectory, instruction_id):
@@ -44,7 +43,7 @@ class DatasetRunner:
 
     def run_split(self,dataset_path):
         #runs agent on each instruction
-        paths_dataset:List[DatasetEntry]=self._load_dataset(dataset_path)
+        paths_dataset=self._load_dataset(dataset_path)
         for path in paths_dataset:
             for index, instruction in enumerate(path["instructions"]):
                 trajectory = self.pipeline.run(instruction, path["scan"],path["path"][0],path['path_id'],path["path"][-1])

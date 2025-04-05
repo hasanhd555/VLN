@@ -1,4 +1,4 @@
-from typing import List, Tuple
+
 import MatterSim
 import math
 import cv2
@@ -29,8 +29,8 @@ class RotationsPipeline(NavigationPipeline):
         self.sim.setDepthEnabled(False)
         self.sim.initialize()
 
-    def run(self, instruction: str, scan: str, starting_viewpoint: str, 
-            instruction_id: str, goal_viewpoint: str) -> List[Tuple[str, float, float]]:
+    def run(self, instruction, scan, starting_viewpoint, 
+            instruction_id, goal_viewpoint):
         trajectory = []
         self.sim.newEpisode([scan], [starting_viewpoint], [0], [0])
         current_state = self.sim.getState()[0]
