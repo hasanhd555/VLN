@@ -45,7 +45,8 @@ class DatasetRunner:
         paths_dataset=self._load_dataset(dataset_path)
         for path in paths_dataset:
             for index, instruction in enumerate(path["instructions"]):
-                trajectory = self.pipeline.run(instruction, path["scan"],path["path"][0],path['path_id'],path["path"][-1])
+                max_length=2*len(path["path"])
+                trajectory = self.pipeline.run(instruction, path["scan"],path["path"][0],path['path_id'],path["path"][-1],max_length)
                 instruction_id = f"{path['path_id']}_{index}"
                 self.log_entry(trajectory,instruction_id)
 

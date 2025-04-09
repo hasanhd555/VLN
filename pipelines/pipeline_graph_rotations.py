@@ -30,7 +30,7 @@ class RotationsPipeline(NavigationPipeline):
         self.sim.initialize()
 
     def run(self, instruction, scan, starting_viewpoint, 
-            instruction_id, goal_viewpoint):
+            instruction_id, goal_viewpoint,max_length):
         trajectory = []
         self.sim.newEpisode([scan], [starting_viewpoint], [0], [0])
         current_state = self.sim.getState()[0]
@@ -48,6 +48,10 @@ class RotationsPipeline(NavigationPipeline):
             current_vp_id = state.location.viewpointId
             
             if current_vp_id == goal_viewpoint:
+                break
+
+            if len(trajectory) > max_length:
+                print("Max length reached for instruction:", instruction_id)
                 break
 
             panorama_images = self._get_images()

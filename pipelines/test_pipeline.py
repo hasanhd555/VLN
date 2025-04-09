@@ -16,7 +16,7 @@ class TestPipeline(NavigationPipeline):
             self.data = json.load(data)
 
     def run(self, instruction, scan, starting_viewpoint, 
-            instruction_id, goal_viewpoint):
+            instruction_id, goal_viewpoint,max_length):
         """Returns trajectory [(viewpoint_id, heading_rads, elevation_rads),]"""
         trajectory=[]
         for path in self.data:
