@@ -51,7 +51,7 @@ def _load_nav_graphs(scans):
 def _load_datasets(splits):
     data = []
     for split in splits:
-        assert split in ["train", "val_seen", "val_unseen", "test"]
+        assert split in ["train", "val_seen", "val_unseen", "test","test_explored"]
         with open("data/task/R2R_%s.json" % split) as f:
             data += json.load(f)
     return data
@@ -141,6 +141,8 @@ class Evaluation(object):
                 # Check against expected ids
                 if item["instr_id"] in instr_ids:
                     instr_ids.remove(item["instr_id"])
+                    instr_id=item["instr_id"]
+                    print(f"checking instrcution {instr_id}")
                     self._score_item(item["instr_id"], item["trajectory"])
         assert len(instr_ids) == 0, (
             "Trajectories not provided for %d instruction ids: %s"
@@ -186,7 +188,7 @@ def eval():
     parser.add_argument("path", type=str, help="path to a results file")
     args = parser.parse_args()
 
-    split = "test"
+    split = "test_explored"
     ev = Evaluation([split])
     score_summary, _ = ev.score(args.path)
     # 取小数点后4位
